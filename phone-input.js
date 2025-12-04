@@ -62,7 +62,6 @@ class PhoneInput extends HTMLElement {
             style.textContent = `
                 phone-input {
                     display: block;
-                    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
                 }
 
                 phone-input .form-group {
@@ -116,6 +115,10 @@ class PhoneInput extends HTMLElement {
 
                 phone-input input.is-invalid {
                     border-color: #dc3545;
+                }
+
+                phone-input .form-group:has(input.is-invalid) .invalid-feedback {
+                    display: block;
                 }
 
                 phone-input input.is-invalid:focus {
