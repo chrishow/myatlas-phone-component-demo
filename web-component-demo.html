@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html class="no-js production" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phone Input Web Component Demo</title>
+
+    <meta name="theme-color" content="#595478">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://myatlas.atlasoceanvoyages.com/css/all.1742925302.min.css" />
+
+    <!-- Load intl-tel-input library (required dependency) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.12.5/build/css/intlTelInput.css">
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.12.5/build/js/intlTelInput.min.js"></script>
+
+    <!-- Load the Web Component - deferred to ensure intlTelInput loads first -->
+    <script src="./phone-input.js" defer></script>
+
+    <style>
+        html {
+            background-color: white;
+        }
+
+        main {
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h3 {
+            margin-bottom: 2rem;
+        }
+
+        .demo-section {
+            margin-bottom: 3rem;
+            padding: 1.5rem;
+            border: 1px solid #dee2e6;
+            border-radius: 0.5rem;
+            background-color: #f8f9fa;
+        }
+
+        .demo-section h4 {
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            color: #495057;
+        }
+
+        phone-input {
+            margin-bottom: 1.5rem;
+
+            .form-group:has(input.is-invalid) .invalid-feedback {
+                display: block;
+            }
+
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            text-align: center;
+            text-decoration: none;
+            vertical-align: middle;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-radius: 0.25rem;
+            transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+        }
+
+        .btn-primary {
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+
+        .btn-secondary {
+            color: #fff;
+            background-color: #6c757d;
+            border-color: #6c757d;
+            margin-left: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            background-color: #545b62;
+            border-color: #4e555b;
+        }
+
+        .validation-message {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            margin-left: 15px;
+            color: green;
+            font-weight: bold;
+        }
+
+        .validation-message.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div class="content">
+            <h3>📱 Phone Input Web Component Demo</h3>
+
+            <!-- Basic Usage -->
+            <div class="demo-section">
+                <h4>1. Basic Usage</h4>
+                <phone-input id="basic-demo" name="phone1" label="Phone Number" required>
+                </phone-input>
+
+                <button id="validate-basic" class="btn btn-primary">Validate</button>
+                <span id="valid-message-1" class="validation-message">✓ Number is valid!</span>
+            </div>
+
+            <!-- Pre-filled Values -->
+            <div class="demo-section">
+                <h4>2. Pre-filled Values</h4>
+
+                <phone-input name="phone2" label="US Number with formatting" value="+1 618-616-0134">
+                </phone-input>
+
+                <phone-input name="phone3" label="US Number without formatting" value="+16186160134">
+                </phone-input>
+
+                <phone-input name="phone4" label="Spanish Number" value="+34 657 45 67 89">
+                </phone-input>
+
+                <phone-input name="phone5" label="Number with country prefix 001" value="001 618-616-0134">
+                </phone-input>
+            </div>
+
+            <!-- Custom Configuration -->
+            <div class="demo-section">
+                <h4>3. Custom Configuration</h4>
+
+                <phone-input name="phone6" label="With Separate Dial Code" separate-dial-code value="+34657456789">
+                </phone-input>
+
+                <phone-input name="phone7" label="Custom Country Order (Spain, UK, US)" country-order="es,gb,us"
+                    initial-country="es">
+                </phone-input>
+
+                <phone-input name="phone8" label="Disabled Field" value="+1 844-442-8527" disabled>
+                </phone-input>
+            </div>
+
+            <!-- Form Integration -->
+            <div class="demo-section">
+                <h4>4. Form Integration</h4>
+
+                <form id="demo-form">
+                    <phone-input name="contact_phone" label="Contact Phone" required>
+                    </phone-input>
+
+                    <phone-input name="alternate_phone" label="Alternate Phone (Optional)">
+                    </phone-input>
+
+                    <button type="submit" class="btn btn-primary">Submit Form</button>
+                </form>
+
+                <div id="form-output"
+                    style="display: none; margin-top: 1rem; padding: 1rem; background-color: #fff; border: 1px solid #dee2e6; border-radius: 0.25rem;">
+                    <div style="font-weight: bold; margin-bottom: 0.5rem;">Form Data:</div>
+                    <div id="form-data"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Basic validation
+        const basicDemo = document.getElementById('basic-demo');
+        const validateBasicBtn = document.getElementById('validate-basic');
+        const validMessage1 = document.getElementById('valid-message-1');
+
+        validateBasicBtn.addEventListener('click', () => {
+            const isValid = basicDemo.validate();
+            if (isValid) {
+                validMessage1.classList.add('show');
+                setTimeout(() => {
+                    validMessage1.classList.remove('show');
+                }, 2000);
+            }
+        });
+
+        // Form integration
+        const demoForm = document.getElementById('demo-form');
+        const formOutput = document.getElementById('form-output');
+        const formData = document.getElementById('form-data');
+
+        demoForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Get all phone inputs
+            const phoneInputs = demoForm.querySelectorAll('phone-input');
+            let allValid = true;
+            const data = {};
+
+            phoneInputs.forEach(input => {
+                const isValid = input.validate();
+                if (!isValid) allValid = false;
+                data[input.getAttribute('name')] = input.getNumber();
+            });
+
+            if (allValid) {
+                formOutput.style.display = 'block';
+                formData.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            }
+        });
+    </script>
+</body>
+
+</html>
