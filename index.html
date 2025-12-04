@@ -158,30 +158,26 @@
                 input.classList.add("is-invalid");
                 input.closest('.form-group').querySelector('.invalid-feedback').textContent = "This field is required";
             } else {
-                // Check that the number starts with a + country code
+                // Check that the number doesn't contain letters
                 const number = input.iti.getNumber();
                 console.log("Validating number:", number);
 
-                if (input.iti.isValidNumber()) {
+                if (/[a-zA-Z]/.test(input.value)) {
+                    input.closest('.form-group').querySelector('.invalid-feedback').textContent = "Phone number cannot contain letters";
+                    input.classList.add("is-invalid");
+                } else if (!input.iti.isValidNumber()) {
+                    const errorCode = input.iti.getValidationError();
+                    const msg = errorMap[errorCode] || "Invalid number";
+                    input.closest('.form-group').querySelector('.invalid-feedback').textContent = msg;
+                    input.classList.add("is-invalid");
+                } else {
                     input.classList.remove("is-invalid");
                     const validMessage = document.querySelector('.has-validated-message');
                     validMessage.style.opacity = '1';
                     setTimeout(() => {
                         validMessage.style.opacity = '0';
                     }, 2000);
-                } else {
-                    const errorCode = input.iti.getValidationError();
-                    const msg = errorMap[errorCode] || "Invalid number";
-                    input.closest('.form-group').querySelector('.invalid-feedback').textContent = msg;
-                    input.classList.add("is-invalid");
                 }
-                // if (!number.startsWith('+')) {
-                //     input.classList.add("is-invalid");
-                //     input.closest('.form-group').querySelector('.invalid-feedback').textContent = "Please include a valid country code";
-                //     return;
-                // }
-                // input.classList.remove("is-invalid");
-
             }
         });
     </script>
