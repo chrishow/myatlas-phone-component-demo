@@ -52,6 +52,8 @@
         #parka-size-modal,
         #boot-size-modal {
 
+            --alt-bg: #eeecf7;
+
             .modal-dialog {
                 max-width: 95%;
                 width: fit-content;
@@ -151,7 +153,7 @@
 
             /* Header Row */
             .size-table thead th {
-                background-color: #f8f8f8;
+                background-color: var(--alt-bg);
                 font-weight: 700;
                 text-transform: uppercase;
             }
@@ -159,7 +161,6 @@
             /* First Column (Labels) styling */
             .size-table tbody th {
                 text-align: left;
-                background-color: #fcfcfc;
                 font-weight: 600;
                 color: #444;
             }
@@ -186,7 +187,7 @@
 
             /* Alternating row colors for readability */
             .size-table tbody tr:nth-child(even) {
-                background-color: #fafafa;
+                background-color: var(--alt-bg);
             }
 
             /* Mobile adjustments */
